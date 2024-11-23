@@ -1,10 +1,142 @@
+@charset "UTF-8";
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
 }
 
 body {
-  margin: 0;
+  color: white;
+  background-color: #121212;
+}
 
-  font-family: Arial, Helvetica, sans-serif;
+a {
+  text-decoration: none;
+
+  color: white;
+}
+
+.container,
+.films__container,
+.search__container,
+.header__container {
+  width: max(100% - 50px, 1200px);
+
+  margin-inline: auto;
+}
+
+.header {
+  height: 80px;
+}
+.header__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -ms-flex-align: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+
+  height: 100%;
+}
+.header__logo {
+  text-transform: uppercase;
+
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.header__subtitle {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  padding: 0.5rem 0;
+
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+
+  color: #b0c4de;
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+
+  font-size: 1.8rem;
+  font-weight: 300;
+}
+.header__subtitle--container {
+  position: relative;
+}
+.header__subtitle--index {
+  position: absolute;
+  top: 10px;
+  right: -12px;
+
+  padding: 0 5px;
+
+  border-radius: 10px;
+  background-color: red;
+}
+
+.search {
+  padding: 2rem;
+
+  text-align: center;
+
+  background-color: #121212;
+}
+.search__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -ms-flex-align: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+.search__input {
+  width: 300px;
+  padding: 0.75rem 1rem;
+
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+
+  font-size: 1rem;
+}
+.search__input--wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -ms-flex-align: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+.search__subtitle {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  color: #ffd700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+
+  font-size: 1.8rem;
+  font-weight: bold;
 }
