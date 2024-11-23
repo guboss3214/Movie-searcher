@@ -1,13 +1,12 @@
 @use 'mixins' as *;
 
-.movies{
+.footer{
+    height: 150px;
     &__container{
         @extend .container;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-        padding-bottom: 20px;
     }
 }

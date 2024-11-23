@@ -1,0 +1,19 @@
+.movie__card {
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    max-width: 220px;
+    max-height: 420px;
+    text-align: center;
+    color: #fff;
+    transition: transform 0.3s ease;
+    &:hover {
+        transform: translateY(-5px);
+        transform: scale(1.2);
+    }
+}
+
+.movie__poster{
+    width: 100%;
+}
