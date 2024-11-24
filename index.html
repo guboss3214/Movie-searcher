@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Кіно пошук</title>
 </head>
 <body>
     <header class="header">
         <div class="header__container">
-            <a href="#"><h1 class="header__logo">Film search</h1></a>
+            <a href="#"><h1 class="header__logo">The best movies</h1></a>
             <div class="header__subtitle--container">
-                <h2 class="header__subtitle">Favourite</h2>
-                <div class="header__subtitle--index">0</div>
+                <h2 class="header__subtitle" id="favourite">Favourite</h2>
+                <div class="header__subtitle--index" id="header-index">0</div>
             </div>
         </div>
     </header>
-    <div class="modal"></div>
+    <div class="modal" id="modal">
+    </div>
     <section class="search">
         <div class="search__container">
             <div class="search__input--wrapper">
@@ -26,13 +28,13 @@
         </div>
     </section>
     <section class="movies">
-        <div class="movies__container">
+        <div class="movies__container" id="movies">
         </div>
     </section>
     <hr>
     <footer class="footer">
         <div class="footer__container">
-            @2023
+            @2024
         </div>
     </footer>
 
