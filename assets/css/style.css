@@ -38,7 +38,7 @@ a {
   padding: 10px;
 
   border-radius: 10px;
-  background-color: black;
+  background-color: white;
   -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 
@@ -84,7 +84,7 @@ a {
 .movies__container,
 .search__container,
 .header__container {
-  width: max(100% - 50px, 1200px);
+  width: min(100% - 30px, 100%);
 
   margin-inline: auto;
 }
@@ -199,6 +199,9 @@ a {
   font-weight: bold;
 }
 
+.movies {
+  min-height: 90vh;
+}
 .movies__container {
   display: -webkit-box;
   display: -ms-flexbox;

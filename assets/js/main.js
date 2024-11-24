@@ -4,7 +4,13 @@ const favouriteMoviesIndex = document.querySelector('#header-index');
 const favouriteMovies = document.querySelector('.header__subtitle');
 const favouriteMoviesList = document.querySelector('#modal');
 
-const moviesStorage = JSON.parse(localStorage.getItem("movies")) || [];
+let moviesStorage = JSON.parse(localStorage.getItem("movies")) || [];
+
+if (!Array.isArray(moviesStorage)) {
+    moviesStorage = [];
+    localStorage.setItem("movies", JSON.stringify(moviesStorage));
+}
+
 let moviesArray = [];
 
 let debounceTime = (() => {
@@ -16,41 +22,31 @@ let debounceTime = (() => {
         }
         timer = setTimeout(cb, ms);
     }
-})()
+})();
 
 function getMovies(inputValue) {
     fetch(`https://www.omdbapi.com/?apikey=5a1ce3c3&s=${inputValue}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            displayMovies(data, inputValue);
+            displayMovies(data);
         })
         .catch(error => console.log(error));
 }
 
-function displayMovies(data, inputValue) {
-    if(data.Search){
+
+function displayMovies(data) {
+    if (data.Search) {
         movies.innerHTML = '';
         data.Search.forEach(movie => {
             const notFound = document.querySelector('.not-found');
-            if(notFound){
+            if (notFound) {
                 notFound.remove();
             }
-            const movieCard = `<div class="movie">
-                    <img 
-                    src="${movie.Poster}" 
-                    alt="${inputValue}" 
-                    class="movie__poster"
-                    />
-                    <h3 class="movie__title">${movie.Title}</h3>
-                    <p class="movie__year">Year: ${movie.Year}</p>
-                    <p class="movie__type">Type: ${movie.Type}</p>
-                    <div><i class="fa-duotone fa-solid fa-heart movie__favourite" id="movie__favourite"></i></div>
-                </div>`
-                movies.innerHTML += movieCard;
+            const movieCard = generateMovieCard(movie);
+            movies.innerHTML += movieCard;
         });
-
-    }else{
+    } else {
         movies.innerHTML = `<h2 class="not-found">Movies not found</h2>`;
     }
     const buttons = document.querySelectorAll('#movie__favourite');
@@ -58,67 +54,86 @@ function displayMovies(data, inputValue) {
         buttons.forEach(button => {
             button.addEventListener('click', (e) => {
                 addToFavourite(e);
-                removeFromFavourite(button);
                 button.style.color = 'red';
-            })
-        })
+            });
+        });
     }
 }
 
-function addToFavourite(e){
-    const moviesList = {
-        title: e.target.closest('.movie').querySelector('.movie__title').textContent,
-        poster: e.target.closest('.movie').querySelector('.movie__poster').src,
-        year: e.target.closest('.movie').querySelector('.movie__year').textContent,
-        type: e.target.closest('.movie').querySelector('.movie__type').textContent,
-    }
-    console.log(localStorage);
-    const movie = e.target.closest('.movie');
-    const alreadyAdded = moviesArray.some(item => item.querySelector('.movie__title').textContent === movie.querySelector('.movie__title').textContent);
-    if(!alreadyAdded){
-        // moviesStorage.push(moviesList);
-        localStorage.setItem("movies", JSON.stringify(moviesList));
-        moviesArray.push(movie);
-        console.log(moviesArray.length);
-        favouriteMoviesIndex.innerHTML = moviesArray.length;
-        favouriteMoviesList.innerHTML += movie.outerHTML;
-    }else{
+function generateMovieCard(movie) {
+    return `
+        <div class="movie">
+            <img src="${movie.Poster && movie.Poster !== 'N/A' ? movie.Poster : '..//assets//images//no-img.jpg'}" alt="${movie.Title}" class="movie__poster" />
+            <h3 class="movie__title">${movie.Title}</h3>
+            <p class="movie__year">${movie.Year}</p>
+            <p class="movie__type">${movie.Type}</p>
+            <div>
+                <i class="fa-duotone fa-solid fa-heart movie__favourite" id="movie__favourite"></i>
+            </div>
+        </div>
+    `;
+}
+
+function addToFavourite(e) {
+    const movieObject = {
+        Title: e.target.closest('.movie').querySelector('.movie__title').textContent,
+        Poster: e.target.closest('.movie').querySelector('.movie__poster').src,
+        Year: e.target.closest('.movie').querySelector('.movie__year').textContent,
+        Type: e.target.closest('.movie').querySelector('.movie__type').textContent,
+    };
+
+    const alreadyAdded = moviesStorage.some(movie => movie.Title === movieObject.title);
+
+    if (!alreadyAdded) {
+        moviesStorage.push(movieObject);
+        localStorage.setItem("movies", JSON.stringify(moviesStorage));
+
+        favouriteMoviesList.innerHTML += generateMovieCard(movieObject);
+        favouriteMoviesIndex.textContent = moviesStorage.length;
+    } else {
         alert('This movie is already in your favourites');
     }
-    
 }
 
 
+function removeFromFavourite(e) {
+    if (e.target.classList.contains('movie__favourite')) {
+        const movieCard = e.target.closest('.movie');
+        const movieTitle = movieCard.querySelector('.movie__title').textContent;
 
-function removeFromFavourite(){
-    const movies = modal.querySelectorAll('.movie');
-    movies.forEach(movie => {
-        movie.addEventListener('click', (e) => {
-            const modalRemove = movie.querySelectorAll('.movie__favourite');
-            const movieToDelete = modalRemove[0].closest('.movie');
-            const movieTitle = movie.querySelector('.movie__title').textContent;
-            movieToDelete.remove();
-            moviesArray = moviesArray.filter(item =>
-                item.querySelector('.movie__title').textContent !== movieTitle
-            );
-            favouriteMoviesIndex.innerHTML = moviesArray.length;
-        })
-    })
-    
+        moviesStorage = moviesStorage.filter(movie => movie.Title !== movieTitle);
+        localStorage.setItem("movies", JSON.stringify(moviesStorage));
+
+        movieCard.remove();
+        favouriteMoviesIndex.textContent = moviesStorage.length;
+    }
 }
 
-function inputHandler(e){
+function loadFavourites() {
+    favouriteMoviesList.innerHTML = '';
+    moviesStorage.forEach(movie => {
+        favouriteMoviesList.innerHTML += generateMovieCard(movie);
+    });
+    favouriteMoviesIndex.textContent = moviesStorage.length;
+}
+
+function inputHandler(e) {
     debounceTime(() => {
         const searchQuery = e.target.value.trim();
-        if(searchQuery){
+        if (searchQuery) {
             getMovies(searchQuery);
         }
-    }, 1000)
+    }, 1000);
 }
 
-function openModal(){
+function openModal() {
+    loadFavourites();
     favouriteMoviesList.classList.toggle('modal--active');
 }
 
-favouriteMovies.addEventListener('click', openModal)
+document.addEventListener('DOMContentLoaded', loadFavourites);
+favouriteMovies.addEventListener('click', openModal);
+favouriteMoviesList.addEventListener('click', removeFromFavourite);
 input.addEventListener('input', inputHandler);
+
+

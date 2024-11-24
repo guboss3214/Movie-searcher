@@ -1,6 +1,7 @@
 @use 'mixins' as *;
 
 .movies{
+    min-height: 90vh;
     &__container{
         @extend .container;
         width: 80%;
