@@ -28,7 +28,6 @@ function getMovies(inputValue) {
     fetch(`https://www.omdbapi.com/?apikey=5a1ce3c3&s=${inputValue}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             displayMovies(data);
         })
         .catch(error => console.log(error));
@@ -53,11 +52,21 @@ function displayMovies(data) {
     if (buttons) {
         buttons.forEach(button => {
             button.addEventListener('click', (e) => {
-                addToFavourite(e);
-                button.style.color = 'red';
+                addToFavourite(e, button);;
             });
         });
     }
+
+    const movieCards = document.querySelectorAll('.movie');
+    movieCards.forEach(card => {
+        const cardTitle = card.querySelector('.movie__title').textContent;
+        const storedMovie = moviesStorage.find(movie => movie.Title === cardTitle);
+
+        if (storedMovie && storedMovie.Favourite) {
+            const heartIcon = card.querySelector('#movie__favourite');
+            heartIcon.style.color = 'red';
+        }
+    });
 }
 
 function generateMovieCard(movie) {
@@ -74,20 +83,20 @@ function generateMovieCard(movie) {
     `;
 }
 
-function addToFavourite(e) {
+function addToFavourite(e, button) {
     const movieObject = {
         Title: e.target.closest('.movie').querySelector('.movie__title').textContent,
         Poster: e.target.closest('.movie').querySelector('.movie__poster').src,
         Year: e.target.closest('.movie').querySelector('.movie__year').textContent,
         Type: e.target.closest('.movie').querySelector('.movie__type').textContent,
+        Favourite:  true,
     };
-
-    const alreadyAdded = moviesStorage.some(movie => movie.Title === movieObject.title);
+    const alreadyAdded = moviesStorage.some(movie => movie.Title === movieObject.Title);
 
     if (!alreadyAdded) {
+        button.style.color = 'red';
         moviesStorage.push(movieObject);
         localStorage.setItem("movies", JSON.stringify(moviesStorage));
-
         favouriteMoviesList.innerHTML += generateMovieCard(movieObject);
         favouriteMoviesIndex.textContent = moviesStorage.length;
     } else {
@@ -104,8 +113,25 @@ function removeFromFavourite(e) {
         moviesStorage = moviesStorage.filter(movie => movie.Title !== movieTitle);
         localStorage.setItem("movies", JSON.stringify(moviesStorage));
 
+        for(let i = 0; i < moviesStorage.length; i++) {
+            if(moviesStorage[i].Title === movieTitle){
+                moviesStorage[i].Favourite = false;
+            }
+        }
+
         movieCard.remove();
         favouriteMoviesIndex.textContent = moviesStorage.length;
+
+        const movieCards = document.querySelectorAll('.movie');
+        movieCards.forEach(card => {
+            const cardTitle = card.querySelector('.movie__title').textContent;
+            
+            if(cardTitle === movieTitle){
+                const favBtn = card.querySelector('.movie__favourite');
+                favBtn.style.color = 'white';
+            }
+        })
+            
     }
 }
 

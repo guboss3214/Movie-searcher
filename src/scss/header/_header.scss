@@ -2,6 +2,7 @@
 
 .header{
     height: 80px;
+    padding-top: 20px;
     &__container{
         @extend .container;
         height: 100%;
@@ -15,6 +16,9 @@
         color: #FFD700;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         text-transform: uppercase;
+        @media (max-width: 465px) {
+            font-size: 1.75rem;
+        }
     }
     &__subtitle{
         font-size: 1.8rem;
