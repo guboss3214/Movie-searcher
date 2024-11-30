@@ -46,7 +46,7 @@ function displayMovies(data) {
     } else {
         movies.innerHTML = `<h2 class="not-found">Movies not found</h2>`;
     }
-    const buttons = document.querySelectorAll('#movie__favourite');
+    const buttons = document.querySelectorAll('.movie__favourite');
     if (buttons) {
         buttons.forEach(button => {
             button.addEventListener('click', (e) => {
@@ -61,7 +61,7 @@ function displayMovies(data) {
         const storedMovie = moviesStorage.find(movie => movie.Title === cardTitle);
 
         if (storedMovie && storedMovie.Favourite) {
-            const heartIcon = card.querySelector('#movie__favourite');
+            const heartIcon = card.querySelector('.movie__favourite');
             heartIcon.style.color = 'red';
         }
     });
@@ -70,12 +70,12 @@ function displayMovies(data) {
 function generateMovieCard(movie) {
     return `
         <div class="movie">
-            <img src="${movie.Poster && movie.Poster !== 'N/A' ? movie.Poster : '..//assets//images//no-img.jpg'}" alt="${movie.Title}" class="movie__poster" />
+            <img src="${movie.Poster && movie.Poster !== 'N/A' ? movie.Poster : '../assets/images/no-img.jpg'}" alt="${movie.Title}" class="movie__poster" />
             <h3 class="movie__title">${movie.Title}</h3>
             <p class="movie__year">${movie.Year}</p>
             <p class="movie__type">${movie.Type}</p>
             <div>
-                <i class="fa-duotone fa-solid fa-heart movie__favourite" id="movie__favourite"></i>
+                <i class="fa-duotone fa-solid fa-heart movie__favourite"></i>
             </div>
         </div>
     `;
@@ -110,12 +110,6 @@ function removeFromFavourite(e) {
 
         moviesStorage = moviesStorage.filter(movie => movie.Title !== movieTitle);
         localStorage.setItem("movies", JSON.stringify(moviesStorage));
-
-        for(let i = 0; i < moviesStorage.length; i++) {
-            if(moviesStorage[i].Title === movieTitle){
-                moviesStorage[i].Favourite = false;
-            }
-        }
 
         movieCard.remove();
         favouriteMoviesIndex.textContent = moviesStorage.length;
