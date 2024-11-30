@@ -11,8 +11,6 @@ if (!Array.isArray(moviesStorage)) {
     localStorage.setItem("movies", JSON.stringify(moviesStorage));
 }
 
-let moviesArray = [];
-
 let debounceTime = (() => {
     let timer = null;
     return (cb, ms) => {
